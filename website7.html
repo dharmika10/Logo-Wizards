@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Logo Craft</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 20px;
+            background-color: #f0f0f0;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+        }
+
+        .controls {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+
+        .logo-display {
+            background: #fff;
+            border: 2px dashed #ccc;
+            min-height: 200px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+        }
+
+        .logo-text {
+            font-size: 48px;
+            font-weight: bold;
+            transition: all 0.3s ease;
+            position: absolute;
+        }
+
+        .curved {
+            transform: rotate(-5deg);
+        }
+
+        .bent {
+            animation: wave 2s infinite;
+        }
+
+        .italicized {
+            font-style: italic;
+        }
+
+        .bordered {
+            text-shadow: -1px -1px 0 #000,  
+                         1px -1px 0 #000,
+                        -1px 1px 0 #000,
+                         1px 1px 0 #000;
+        }
+
+        @keyframes wave {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-20px); }
+        }
+
+        input[type="checkbox"] {
+            margin-right: 5px;
+        }
+
+        .color-picker {
+            display: flex;
+            gap: 10px;
+            margin-top: 10px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Logo Craft</h1>
+        <div class="controls">
+            <div>
+                <input type="text" id="logoInput" placeholder="Enter logo text" style="width: 100%">
+            </div>
+            <div>
+                <label><input type="checkbox" id="curved"> Curved</label>
+                <label><input type="checkbox" id="bent"> Bent</label>
+                <label><input type="checkbox" id="italicized"> Italicized</label>
+                <label><input type="checkbox" id="bordered"> Bordered</label>
+            </div>
+            <div class="color-picker">
+                <input type="color" id="textColor" value="#ff0000">
+                <input type="color" id="borderColor" value="#000000">
+            </div>
+        </div>
+        <div class="logo-display">
+            <div id="logoOutput" class="logo-text">Your Logo</div>
+        </div>
+    </div>
+
+    <script>
+        const logoInput = document.getElementById('logoInput');
+        const logoOutput = document.getElementById('logoOutput');
+        const checkboxes = document.querySelectorAll('input[type="checkbox"]');
+        const textColor = document.getElementById('textColor');
+        const borderColor = document.getElementById('borderColor');
+
+        function updateLogo() {
+            // Update text content
+            logoOutput.textContent = logoInput.value || 'Your Logo';
+
+            // Update styles
+            logoOutput.className = 'logo-text';
+            
+            if(document.getElementById('curved').checked) {
+                logoOutput.classList.add('curved');
+                // Add dynamic curve effect
+                const letters = logoOutput.textContent.split('');
+                logoOutput.innerHTML = letters.map((letter, index) => 
+                    <span style="display: inline-block; transform: rotate(${index * 5 - (letters.length * 2.5)}deg)">${letter}</span>
+                ).join('');
+            }
+
+            if(document.getElementById('bent').checked) {
+                logoOutput.classList.add('bent');
+            }
+
+            if(document.getElementById('italicized').checked) {
+                logoOutput.classList.add('italicized');
+            }
+
+            if(document.getElementById('bordered').checked) {
+                logoOutput.classList.add('bordered');
+                logoOutput.style.textShadow = `-1px -1px 0 ${borderColor.value},  
+                                                 1px -1px 0 ${borderColor.value},
+                                                -1px 1px 0 ${borderColor.value},
+                                                 1px 1px 0 ${borderColor.value}`;
+            }
+
+            // Update colors
+            logoOutput.style.color = textColor.value;
+        }
+
+        // Event listeners
+        logoInput.addEventListener('input', updateLogo);
+        checkboxes.forEach(checkbox => checkbox.addEventListener('change', updateLogo));
+        textColor.addEventListener('input', updateLogo);
+        borderColor.addEventListener('input', updateLogo);
+
+        // Initial update
+        updateLogo();
+    </script>
+</body>
+</html>
