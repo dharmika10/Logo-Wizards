@@ -1,2 +1,2 @@
-# logo
+# Logo Wizards
 logocraft
